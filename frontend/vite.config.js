@@ -15,12 +15,12 @@ export default defineConfig({
         theme_color: '#16a34a',
         icons: [
           {
-            src: '/icon-192x192.png',
+            src: '/assets/react.svg',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/icon-512x512.png',
+            src: './assets/react.svg',
             sizes: '512x512',
             type: 'image/png'
           }
