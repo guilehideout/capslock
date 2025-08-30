@@ -47,10 +47,13 @@ export default function LandingPage() {
       {menuOpen && (
         <div className="md:hidden fixed top-14 right-0 w-1/3  bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
           <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end">
-            <li><a href="#about" onClick={() => setMenuOpen(false)}>About</a></li>
-            <li><a href="#features" onClick={() => setMenuOpen(false)}>Features</a></li>
-            <li><a href="#impact" onClick={() => setMenuOpen(false)}>Impact</a></li>
-            <li><a href="#users" onClick={() => setMenuOpen(false)}>Users</a></li>
+            <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
+            <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
+            <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/report" onClick={() => setMenuOpen(false)}>Report</Link></a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link></a></li>
             <li></li>
           </ul>
         </div>
