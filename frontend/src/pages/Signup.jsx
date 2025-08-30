@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -55,17 +54,17 @@ function Signup() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50"
           style={{ backgroundImage: "url('/bg_web.jpg')" }}
     >
-      
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-sm border border-green-100">
-        <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
+      <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-5 w-full max-w-xs sm:max-w-sm md:max-w-md border border-green-100">
+        <h1 className="text-lg sm:text-xl font-semibold text-green-700 text-center mb-4 sm:mb-5">
           🌱 Create an Account
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && <p className="text-red-600 text-sm">{error}</p>}
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {error && <p className="text-red-600 text-xs">{error}</p>}
+
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Full Name
             </label>
             <input
@@ -73,14 +72,14 @@ function Signup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="John Doe"
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
             <input
@@ -88,14 +87,14 @@ function Signup() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="you@example.com"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
@@ -103,14 +102,14 @@ function Signup() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="••••••••"
             />
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Confirm Password
             </label>
             <input
@@ -118,7 +117,7 @@ function Signup() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-1.5 text-xs sm:text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="••••••••"
             />
           </div>
@@ -126,14 +125,14 @@ function Signup() {
           {/* Signup Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 rounded-xl shadow hover:opacity-90 transition"
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-1.5 sm:py-2 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
             disabled={loading}
           >
             Sign Up
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 text-center mt-4">
+        <p className="text-xs sm:text-sm text-gray-600 text-center mt-4">
           Already have an account?{" "}
           <Link
             to="/login"
