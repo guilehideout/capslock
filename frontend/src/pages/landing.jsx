@@ -29,7 +29,7 @@ export default function LandingPage() {
           <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
             <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
             <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
-            <li><a href="#impact" className="hover:text-[#68D391]">Impact</a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
             <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
             <li><a href="" className="hover:text-[#68D391]"><Link to="/report" onClick={() => setMenuOpen(false)}>Report</Link></a></li>
             <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
@@ -58,7 +58,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <Parallax blur={0} bgImage={bgImage} bgImageAlt="Mangroves" strength={400}>
-        <section className="text-center py-32 px-4 md:py-40 text-white bg-[#2F855A]/40">
+        <section className="text-center py-32 px-4 md:py-40 text-white">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">
             Protecting Mangroves, Empowering Communities
           </h2>
@@ -67,7 +67,7 @@ export default function LandingPage() {
             safeguard mangrove forests with AI validation and gamified participation.
           </p>
           <a href="https://tinyurl.com/hbr6ysmt">
-          <button className="bg-[#68D391] text-white px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#2F855A] onClick-co">
+          <button className="bg-[#68D391] text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#2F855A] onClick-co">
             Learn More
           </button>
           </a>
@@ -88,7 +88,7 @@ export default function LandingPage() {
 
       {/* Features Section */}
       <Parallax blur={0} bgImage={bgImage} bgImageAlt="Features" strength={300}>
-        <section id="features" className="py-16 md:py-20 px-5 md:px-8 text-white bg-[#2F855A]/40">
+        <section id="features" className="py-16 md:py-20 px-5 md:px-8 text-white">
           <h3 className="text-xl md:text-3xl font-bold text-center mb-6 md:mb-12">
             Key Features
           </h3>
@@ -109,39 +109,33 @@ export default function LandingPage() {
         </section>
       </Parallax>
 
-      {/* Impact Section */}
-      <Parallax blur={0} bgImage={bgImage} bgImageAlt="Impact" strength={500}>
-        <section id="impact" className="py-16 md:py-20 px-5 md:px-8 max-w-6xl mx-auto text-center text-white bg-[#2F855A]/40">
-          <h3 className="text-xl md:text-3xl font-bold mb-6 md:mb-8">Impact</h3>
-          <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-            <div className="bg-[#68D391]/90 p-5 rounded-xl shadow text-[#1A202C]">
-              <p className="text-sm md:text-lg font-semibold">🌍 Better Surveillance</p>
-              <p className="text-xs md:text-base">Real-time protection of mangrove ecosystems.</p>
-            </div>
-            <div className="bg-[#68D391]/90 p-5 rounded-xl shadow text-[#1A202C]">
-              <p className="text-sm md:text-lg font-semibold">🤝 Community Empowerment</p>
-              <p className="text-xs md:text-base">Local communities take active roles in conservation.</p>
-            </div>
-            <div className="bg-[#68D391]/90 p-5 rounded-xl shadow text-[#1A202C]">
-              <p className="text-sm md:text-lg font-semibold">✅ Policy Action</p>
-              <p className="text-xs md:text-base">Authorities get reliable data for quick enforcement.</p>
-            </div>
-          </div>
-        </section>
-      </Parallax>
+      {/* Additional Content to Make the Page Scrollable */}
+<section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto">
+  <h3 className="text-xl md:text-3xl font-bold text-center text-[#2F855A] mb-4 md:mb-8">
+    Why Mangroves Matter
+  </h3>
+  <p className="text-sm md:text-lg leading-relaxed text-center">
+    Mangrove forests act as critical buffers between land and sea, protecting coastal areas
+    from erosion and storm surges. They also support a wide range of biodiversity and act as
+    vital carbon sinks, absorbing more carbon per hectare than terrestrial forests.
+  </p>
+</section>
+<Parallax blur={0} bgImage={bgImage} bgImageAlt="Features" strength={300}>
+<section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto " >
+  <h3 className="text-xl md:text-3xl font-bold text-center text-white mb-4 md:mb-8">
+    How We Involve the Community
+  </h3>
+  <p className="text-sm md:text-lg leading-relaxed text-center text-white">
+    Our platform encourages communities to get involved in protecting mangroves by reporting
+    incidents, participating in conservation efforts, and getting rewarded for their actions.
+    This participatory approach ensures that local people have a voice in the management
+    and preservation of these critical ecosystems.
+  </p>
+</section>
+</Parallax>
 
-      {/* Users Section */}
-      <section id="users" className="py-12 md:py-20 px-5 md:px-8">
-        <h3 className="text-xl md:text-3xl font-bold text-center text-[#2F855A] mb-6 md:mb-8">
-          Who Benefits?
-        </h3>
-        <div className="flex flex-wrap justify-center gap-4 md:gap-6">
-          <div className="bg-[#FDF6E3] shadow p-4 md:p-6 rounded-xl w-36 md:w-64 text-center text-sm md:text-base">🌊 Coastal Communities</div>
-          <div className="bg-[#FDF6E3] shadow p-4 md:p-6 rounded-xl w-36 md:w-64 text-center text-sm md:text-base">🌱 NGOs & Conservationists</div>
-          <div className="bg-[#FDF6E3] shadow p-4 md:p-6 rounded-xl w-36 md:w-64 text-center text-sm md:text-base">🏛 Government Authorities</div>
-          <div className="bg-[#FDF6E3] shadow p-4 md:p-6 rounded-xl w-36 md:w-64 text-center text-sm md:text-base">📊 Researchers</div>
-        </div>
-      </section>
+
+
 
       {/* Footer */}
       <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">
