@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "./navbar";  // Assuming Navbar is saved as a separate component
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -12,17 +13,15 @@ function Login() {
 
   useEffect(() => {
     const handleResize = () => {
-      // Switch background image based on screen width
       if (window.innerWidth < 768) {
-        setBgImage("/bg_img.jpg"); // Mobile background
+        setBgImage("/bg_img.jpg");
       } else {
-        setBgImage("/bg_web.jpg"); // Desktop background
+        setBgImage("/bg_web.jpg");
       }
     };
 
-    handleResize(); // Set initial image based on screen size
-    window.addEventListener("resize", handleResize); // Update background image on resize
-
+    handleResize();
+    window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -37,7 +36,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // important if using cookies (JWT/refresh tokens)
+        credentials: "include",
         body: JSON.stringify({ email, password }),
       });
 
@@ -47,14 +46,10 @@ function Login() {
         throw new Error(data.message || "Login failed");
       }
 
-      console.log(data);
-
-      // Example: if backend sends a token
       if (data.data.session.access_token) {
         localStorage.setItem("token", data.data.session.access_token);
       }
 
-      // Redirect to dashboard/home after login
       navigate("/home");
     } catch (err) {
       setError(err.message);
@@ -64,67 +59,55 @@ function Login() {
   };
 
   return (
-    <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImage})` }} // Dynamically setting background image
-    >
-      <div className="bg-white/90 shadow-xl rounded-2xl p-4 sm:p-6 w-full max-w-xs sm:max-w-sm">
-        <h1 className="text-xl sm:text-2xl font-bold text-green-700 text-center mb-4 sm:mb-6">
-          🌱 Community Mangrove Watch
-        </h1>
+    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${bgImage})` }}>
+      <Navbar />  {/* Include Navbar here */}
+      <div className="flex items-center justify-center min-h-screen ">
+        <div className="bg-white/90 shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
+          <h1 className="text-3xl font-bold text-green-700 text-center mb-6">🌱 Community Mangrove Watch</h1>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          {/* Email */}
-          <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="you@example.com"
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="you@example.com"
+              />
+            </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="••••••••"
-            />
-          </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                placeholder="••••••••"
+              />
+            </div>
 
-          {/* Error */}
-          {error && (
-            <p className="text-red-600 text-xs sm:text-sm text-center">{error}</p>
-          )}
+            {error && <p className="text-red-600 text-xs text-center">{error}</p>}
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 sm:py-2.5 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
+            >
+              {loading ? "Logging in..." : "Login"}
+            </button>
+          </form>
 
-        <p className="text-xs sm:text-sm text-gray-600 text-center mt-4">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-green-700 font-semibold hover:underline">
-            Sign up
-          </Link>
-        </p>
+          <p className="text-sm text-gray-600 text-center mt-4">
+            Don’t have an account?{" "}
+            <Link to="/signup" className="text-green-700 font-semibold hover:underline">
+              Sign up
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );

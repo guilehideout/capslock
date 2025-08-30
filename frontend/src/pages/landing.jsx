@@ -30,19 +30,18 @@ export default function LandingPage() {
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
         <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
-          🌿 Community Mangrove Watch
+          🌿 ManGrow
         </h1>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">
           <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
-            <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
-            <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
-            <li><Link to="/impact" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Impact</Link></li>
-            <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
-            <li><Link to="/report" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Report</Link></li>
-            <li><Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Login</Link></li>
-            <li><Link to="/signup" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Signup</Link></li>
+            <li><a href="/about" className="hover:text-[#68D391]"><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></a></li>
+            {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
+            {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link></a></li>
           </ul>
         </nav>
 
@@ -56,13 +55,12 @@ export default function LandingPage() {
       {menuOpen && (
         <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
           <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end">
-            <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
-            <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
-            <li><Link to="/impact" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Impact</Link></li>
-            <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
-            <li><Link to="/report" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Report</Link></li>
-            <li><Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Login</Link></li>
-            <li><Link to="/signup" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Signup</Link></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/about" onClick={() => setMenuOpen(false)}>About</Link></a></li>
+            {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
+            {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
+            <li><a href="" className="hover:text-[#68D391]"><Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link></a></li>
           </ul>
         </div>
       )}
@@ -77,11 +75,11 @@ export default function LandingPage() {
             A participatory monitoring system where communities, NGOs, and authorities
             safeguard mangrove forests with AI validation and gamified participation.
           </p>
-          <a href="https://tinyurl.com/hbr6ysmt">
+          {/* <a href="https://tinyurl.com/hbr6ysmt">
             <button className="bg-[#68D391] text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#2F855A]" data-aos="fade-up" data-aos-delay="400">
               Learn More
             </button>
-          </a>
+          </a> */}
         </section>
       </Parallax>
 
@@ -149,7 +147,7 @@ export default function LandingPage() {
 
       {/* Footer */}
       <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">
-        <p>© 2025 Community Mangrove Watch | Built with ❤ at Hackathon</p>
+        <p>© 2025 Community Mangrove Watch | Built with ❤ at HackOut'25 by capslock</p>
       </footer>
     </div>
   );
