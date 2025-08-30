@@ -11,8 +11,11 @@ function Login() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-sm border border-green-100">
+    <div
+      className="flex items-center justify-center min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: "url('/bg_web.jpg')" }} 
+    >
+      <div className="bg-white/90 shadow-xl rounded-2xl p-8 w-full max-w-sm">
         <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
           🌱 Community Mangrove Watch
         </h1>
@@ -48,22 +51,17 @@ function Login() {
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 rounded-xl shadow hover:opacity-90 transition"
+            className="w-full bg-green-600 text-white py-2 rounded-xl shadow hover:bg-green-700 transition"
           >
             Login
           </button>
         </form>
 
-        {/* Extra */}
         <p className="text-sm text-gray-600 text-center mt-4">
           Don’t have an account?{" "}
-          <Link
-            to="/signup"
-            className="text-green-700 font-semibold hover:underline"
-          >
+          <Link to="/signup" className="text-green-700 font-semibold hover:underline">
             Sign up
           </Link>
         </p>
@@ -73,4 +71,3 @@ function Login() {
 }
 
 export default Login;
-
