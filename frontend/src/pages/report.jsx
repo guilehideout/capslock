@@ -40,7 +40,9 @@ function ReportForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50"
+        style={{ backgroundImage: "url('/bg_web.jpg')" }} 
+    >
       <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-green-100">
         <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
           🌱 Submit Mangrove Report
