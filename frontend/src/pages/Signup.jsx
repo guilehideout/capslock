@@ -1,19 +1,54 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
     if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setError("Passwords do not match!");
       return;
     }
-    alert(`Name: ${name}\nEmail: ${email}`);
+
+    try {
+      setLoading(true);
+      const res = await fetch("http://localhost:8000/api/v1/users/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          email,
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      // If signup successful
+      // alert("Signup successful!");
+      navigate("/home");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,6 +62,7 @@ function Signup() {
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {error && <p className="text-red-600 text-sm">{error}</p>}
           {/* Full Name */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -91,6 +127,7 @@ function Signup() {
           <button
             type="submit"
             className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 rounded-xl shadow hover:opacity-90 transition"
+            disabled={loading}
           >
             Sign Up
           </button>
@@ -108,6 +145,6 @@ function Signup() {
       </div>
     </div>
   );
-}
+};
 
 export default Signup;
