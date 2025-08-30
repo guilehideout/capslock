@@ -22,7 +22,9 @@ app.use(cors({
 }));
 
 import userRouter from "./routers/user.js";
+import reportRouter from "./routers/report.js";
 app.use("/api/v1/users", userRouter);
+app.use("/api/v1/", reportRouter);
 
 app.get('/api/v1', (req, res) => {
     console.log("Working from express");

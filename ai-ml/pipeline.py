@@ -35,6 +35,7 @@ class ComplaintClassifier:
             return "invalid"
         return self.clf_validity.predict(self.vectorizer_validity.transform([text]))[0]
 
+    #  Text input-string
     def classify_complaint(self, text):
         validity = self.quick_validity_check(text)
         if validity == "invalid":
