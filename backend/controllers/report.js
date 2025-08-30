@@ -1,75 +1,73 @@
-import supabase from "../config/supabaseClient.js";
+import supabase, { superSupabase } from "../config/supabaseClient.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { checkEmptyStringAndTrim } from "../utils/validator.js";
+import { checkEmptyStringAndTrim, checkRequired } from "../utils/validator.js";
 import axios from "axios";
+import FormData from "form-data";
+import fs from "fs";
 
 /**
- * Validate report description using local rules + external Python service
+ * Validate report description using Python service
  */
 async function validateReportDescription(description) {
-  const cleanedDescription = checkEmptyStringAndTrim(
-    description,
-    "Report Description"
-  );
-
-  if (cleanedDescription.length > 100) {
-    throw new ApiError(400, "Description too long");
-  }
+  const cleaned = checkEmptyStringAndTrim(description, "Report Description");
+  if (cleaned.length > 100) throw new ApiError(400, "Description too long");
 
   try {
     const { data } = await axios.post(
       `${process.env.FLASK_URL}/classify-text`,
-      { text: cleanedDescription }
+      { text: cleaned }
     );
+
     if (data.validity === "invalid") {
       throw new ApiError(400, "Invalid report description");
     }
     return data;
-  } catch (error) {
-    console.error(
-      "Error calling Python Text API:",
-      error.response ? error.response.data : error.message
-    );
+  } catch (err) {
+    console.error("Error calling Python Text API:", err.message);
     throw new ApiError(500, "Text validation service unavailable");
   }
 }
 
 /**
- * Classify report image via external Python service
+ * Validate report image with Python service
  */
 async function classifyReportImage(filePath) {
+  const formData = new FormData();
+  formData.append("file", fs.createReadStream(filePath));
+
   try {
     const { data } = await axios.post(
       `${process.env.FLASK_URL}/classify-image`,
-      { image_path: filePath } // Flask should handle local or uploaded path
+      formData,
+      { headers: formData.getHeaders() }
     );
+
     if (data.validity === "invalid") {
       throw new ApiError(400, "Invalid report image");
     }
     return data;
-  } catch (error) {
-    console.error(
-      "Error calling Python Image API:",
-      error.response ? error.response.data : error.message
-    );
+  } catch (err) {
+    console.error("Error calling Python Image API:", err.message);
     throw new ApiError(500, "Image validation service unavailable");
   }
 }
 
 /**
- * Upload image to Supabase Storage and return public URL
+ * Upload image to Supabase Storage
  */
 async function uploadReportImage(file) {
   const filename = `reports/${Date.now()}_${file.originalname}`;
-  const { error } = await supabase.storage
+  const fileBuffer = fs.readFileSync(file.path);
+
+  const { error } = await superSupabase.storage
     .from("images")
-    .upload(filename, file.path);
+    .upload(filename, fileBuffer, { contentType: file.mimetype });
 
   if (error) throw new ApiError(400, error.message);
 
-  const { data } = supabase.storage.from("images").getPublicUrl(filename);
+  const { data } = superSupabase.storage.from("images").getPublicUrl(filename);
   return data.publicUrl;
 }
 
@@ -80,36 +78,55 @@ const submitReport = asyncHandler(async (req, res) => {
   const { description, location, user_id } = req.body;
   const imageFile = req.file;
 
+  checkRequired(user_id, "User Id");
   if (!imageFile) throw new ApiError(400, "Image is required");
 
   // 1. Validate description
-  const validationResult = await validateReportDescription(description);
+  const textValidation = await validateReportDescription(description);
 
-  // 2. Classify image (before uploading to Supabase)
-  const imageClassification = await classifyReportImage(imageFile.path);
+  // 2. Classify image
+  const imageValidation = await classifyReportImage(imageFile.path);
+  console.log(imageValidation);
 
-  // 3. Upload image to Supabase
+  // 3. Upload image
   const photoUrl = await uploadReportImage(imageFile);
 
-  // 4. Insert into DB
-  const { error } = await supabase.from("reports").insert({
+  // 4. Fetch user profile (bypass RLS with superSupabase)
+  const { data: user, error: fetchError } = await superSupabase
+    .from("profiles")
+    .select("points")
+    .eq("user_id", user_id)
+    .single();
+
+  if (fetchError || !user) throw new ApiError(404, "User not found");
+
+  // 5. Increment user points (+10)
+  const { error: updateError } = await superSupabase
+    .from("profiles")
+    .update({ points: user.points + 10 })
+    .eq("user_id", user_id);
+
+  if (updateError) throw new ApiError(400, "Could not update user points");
+
+  // 6. Insert report
+  const { error: insertError } = await supabase.from("reports").insert({
     user_id,
     photo_url: photoUrl,
     description,
     location,
-    status: "pending",
-    category: validationResult.category || imageClassification.category || null, // merge text + image category if available
+    category: textValidation.category || imageValidation.category || null,
+    validity: (textValidation.validity === "valid" && imageValidation.prediction === "mongroove") 
   });
 
-  if (error) throw new ApiError(400, error.message);
+  if (insertError) throw new ApiError(400, insertError.message);
 
   res.status(200).json(
     new ApiResponse(
       200,
       {
         photoUrl,
-        textValidation: validationResult,
-        imageValidation: imageClassification,
+        textValidation,
+        imageValidation,
       },
       "Report submitted successfully"
     )
@@ -117,7 +134,7 @@ const submitReport = asyncHandler(async (req, res) => {
 });
 
 /**
- * Get all reports for a user
+ * Get reports for logged-in user
  */
 const getUserReports = asyncHandler(async (req, res) => {
   const { user_id } = req.body;
@@ -129,9 +146,7 @@ const getUserReports = asyncHandler(async (req, res) => {
 
   if (error) throw new ApiError(400, error.message);
 
-  res
-    .status(200)
-    .json(new ApiResponse(200, data, "Reports retrieved successfully"));
+  res.status(200).json(new ApiResponse(200, data, "Reports retrieved successfully"));
 });
 
 export { submitReport, getUserReports };
