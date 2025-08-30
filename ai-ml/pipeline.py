@@ -1,52 +1,67 @@
-# complaint_pipeline.py
+import torch
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
-import re
+class NLPComplaintPipeline:
+    """
+    Lightweight pipeline for classifying complaints:
+    - Step 1: Validity (valid/invalid)
+    - Step 2: Category (cutting/dying/pollution/other)
 
-class ComplaintClassifier:
-    def __init__(self, clf_validity, vectorizer_validity, clf_category, vectorizer_category):
-        self.clf_validity = clf_validity
-        self.vectorizer_validity = vectorizer_validity
-        self.clf_category = clf_category
-        self.vectorizer_category = vectorizer_category
-        self.bad_samples = ["asdfghjkl", "hello world", "test entry", "spam", "gibberish"]
+    Loads pretrained models and their weights. Does NOT save anything automatically.
+    """
 
-    def nlp_semantic_check(self, text):
-        alpha_text = re.sub(r'[^a-zA-Z\s]', '', text)
-        words = alpha_text.split()
-        if len(words) < 2:
-            return False
-        word_counts = {w: words.count(w) for w in set(words)}
-        if any(count > 3 for count in word_counts.values()):
-            return False
-        alpha_ratio = sum(c.isalpha() for c in text) / max(1, len(text))
-        if alpha_ratio < 0.5:
-            return False
-        return True
+    def __init__(self, validity_model_path, category_model_path, device=None):
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
 
-    def quick_validity_check(self, text):
-        if len(text.split()) < 3:
-            return "invalid"
-        words = text.lower().split()
-        if len(set(words)) == 1:
-            return "invalid"
-        if any(bad in text.lower() for bad in self.bad_samples):
-            return "invalid"
-        if not self.nlp_semantic_check(text):
-            return "invalid"
-        return self.clf_validity.predict(self.vectorizer_validity.transform([text]))[0]
+        # Load Validity model + tokenizer
+        self.tokenizer_validity = AutoTokenizer.from_pretrained(validity_model_path)
+        self.model_validity = AutoModelForSequenceClassification.from_pretrained(validity_model_path)
+        self.model_validity.to(self.device)
+        self.model_validity.eval()
 
-    #  Text input-string
+        # Load Category model + tokenizer
+        self.tokenizer_category = AutoTokenizer.from_pretrained(category_model_path)
+        self.model_category = AutoModelForSequenceClassification.from_pretrained(category_model_path)
+        self.model_category.to(self.device)
+        self.model_category.eval()
+
+        self.categories = ["cutting", "dying", "pollution", "other"]
+
+    def predict_validity(self, text):
+        """Predicts if complaint is valid or invalid"""
+        inputs = self.tokenizer_validity(
+            text, return_tensors="pt", truncation=True, padding=True, max_length=128
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            logits = self.model_validity(**inputs).logits
+            pred = torch.argmax(torch.sigmoid(logits), dim=1).item()
+        return "valid" if pred == 1 else "invalid"
+
+    def predict_category(self, text):
+        """Predicts category if complaint is valid"""
+        inputs = self.tokenizer_category(
+            text, return_tensors="pt", truncation=True, padding=True, max_length=128
+        )
+        inputs = {k: v.to(self.device) for k, v in inputs.items()}
+        with torch.no_grad():
+            logits = self.model_category(**inputs).logits
+            pred = torch.argmax(logits, dim=1).item()
+        return self.categories[pred]
+
     def classify_complaint(self, text):
-        validity = self.quick_validity_check(text)
+        """Unified function to classify validity + category"""
+        validity = self.predict_validity(text)
         if validity == "invalid":
             return {"validity": "invalid", "category": "N/A"}
-        
-        category_features = self.vectorizer_category.transform([text])
-        category_pred = self.clf_category.predict(category_features)[0]
+        category = self.predict_category(text)
+        return {"validity": "valid", "category": category}
 
-        if category_pred == "cutting":
-            category_pred = "pollution"
-        elif category_pred == "pollution":
-            category_pred = "cutting"
-
-        return {"validity": "valid", "category": category_pred}
+    def load_weights(self, validity_weights_path, category_weights_path):
+        """Load saved model weights separately"""
+        self.model_validity.load_state_dict(
+            torch.load(validity_weights_path, map_location=self.device)
+        )
+        self.model_category.load_state_dict(
+            torch.load(category_weights_path, map_location=self.device)
+        )
