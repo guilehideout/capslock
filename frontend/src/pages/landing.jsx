@@ -2,6 +2,8 @@ import { Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Parallax } from "react-parallax";
 import { Menu, X } from "lucide-react";
+import AOS from "aos";
+import "aos/dist/aos.css"; // Import AOS styles
 
 export default function LandingPage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -13,6 +15,13 @@ export default function LandingPage() {
     };
     handleResize();
     window.addEventListener("resize", handleResize);
+
+    // Initialize AOS
+    AOS.init({
+      duration: 1200, // Animation duration
+      once: true, // Animation happens once
+    });
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -29,11 +38,11 @@ export default function LandingPage() {
           <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
             <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
             <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
+            <li><Link to="/impact" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Impact</Link></li>
             <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/report" onClick={() => setMenuOpen(false)}>Report</Link></a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link></a></li>
+            <li><Link to="/report" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Report</Link></li>
+            <li><Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Login</Link></li>
+            <li><Link to="/signup" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Signup</Link></li>
           </ul>
         </nav>
 
@@ -45,16 +54,15 @@ export default function LandingPage() {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden fixed top-14 right-0 w-1/3  bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
+        <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
           <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end">
             <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
             <li><a href="#features" className="hover:text-[#68D391]">Features</a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/impact" onClick={() => setMenuOpen(false)}>Impact</Link></a></li>
+            <li><Link to="/impact" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Impact</Link></li>
             <li><a href="#users" className="hover:text-[#68D391]">Users</a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/report" onClick={() => setMenuOpen(false)}>Report</Link></a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/login" onClick={() => setMenuOpen(false)}>Login</Link></a></li>
-            <li><a href="" className="hover:text-[#68D391]"><Link to="/signup" onClick={() => setMenuOpen(false)}>Signup</Link></a></li>
-            <li></li>
+            <li><Link to="/report" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Report</Link></li>
+            <li><Link to="/login" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Login</Link></li>
+            <li><Link to="/signup" onClick={() => setMenuOpen(false)} className="hover:text-[#68D391]">Signup</Link></li>
           </ul>
         </div>
       )}
@@ -62,23 +70,23 @@ export default function LandingPage() {
       {/* Hero Section */}
       <Parallax blur={0} bgImage={bgImage} bgImageAlt="Mangroves" strength={400}>
         <section className="text-center py-32 px-4 md:py-40 text-white">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4" data-aos="fade-up">
             Protecting Mangroves, Empowering Communities
           </h2>
-          <p className="max-w-xl md:max-w-2xl mx-auto text-base md:text-lg mb-6">
+          <p className="max-w-xl md:max-w-2xl mx-auto text-base md:text-lg mb-6" data-aos="fade-up" data-aos-delay="200">
             A participatory monitoring system where communities, NGOs, and authorities
             safeguard mangrove forests with AI validation and gamified participation.
           </p>
           <a href="https://tinyurl.com/hbr6ysmt">
-          <button className="bg-[#68D391] text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#2F855A] onClick-co">
-            Learn More
-          </button>
+            <button className="bg-[#68D391] text-black px-6 py-3 rounded-xl font-semibold shadow-md hover:bg-[#2F855A]" data-aos="fade-up" data-aos-delay="400">
+              Learn More
+            </button>
           </a>
         </section>
       </Parallax>
 
       {/* About Section */}
-      <section id="about" className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto">
+      <section id="about" className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto" data-aos="fade-up">
         <h3 className="text-xl md:text-3xl font-bold text-center text-[#2F855A] mb-4 md:mb-8">
           About the Project
         </h3>
@@ -91,20 +99,20 @@ export default function LandingPage() {
 
       {/* Features Section */}
       <Parallax blur={0} bgImage={bgImage} bgImageAlt="Features" strength={300}>
-        <section id="features" className="py-16 md:py-20 px-5 md:px-8 text-white">
+        <section id="features" className="py-16 md:py-20 px-5 md:px-8 text-white" data-aos="fade-up">
           <h3 className="text-xl md:text-3xl font-bold text-center mb-6 md:mb-12">
             Key Features
           </h3>
           <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 max-w-6xl mx-auto">
-            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]">
+            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]" data-aos="fade-up">
               <h4 className="text-base md:text-xl font-semibold text-[#2F855A] mb-2">📱 Easy Reporting</h4>
               <p className="text-sm md:text-base">Communities report incidents via mobile apps or SMS with geotagged photos.</p>
             </div>
-            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]">
+            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]" data-aos="fade-up" data-aos-delay="200">
               <h4 className="text-base md:text-xl font-semibold text-[#2F855A] mb-2">🛰 AI + Satellite Validation</h4>
               <p className="text-sm md:text-base">AI cross-checks reports with satellite data to reduce false alarms.</p>
             </div>
-            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]">
+            <div className="p-5 bg-[#FDF6E3]/90 rounded-2xl shadow hover:shadow-lg text-[#1A202C]" data-aos="fade-up" data-aos-delay="400">
               <h4 className="text-base md:text-xl font-semibold text-[#2F855A] mb-2">🏆 Gamified Participation</h4>
               <p className="text-sm md:text-base">Users earn points, badges, and leaderboard rankings for participation.</p>
             </div>
@@ -112,33 +120,32 @@ export default function LandingPage() {
         </section>
       </Parallax>
 
-      {/* Additional Content to Make the Page Scrollable */}
-<section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto">
-  <h3 className="text-xl md:text-3xl font-bold text-center text-[#2F855A] mb-4 md:mb-8">
-    Why Mangroves Matter
-  </h3>
-  <p className="text-sm md:text-lg leading-relaxed text-center">
-    Mangrove forests act as critical buffers between land and sea, protecting coastal areas
-    from erosion and storm surges. They also support a wide range of biodiversity and act as
-    vital carbon sinks, absorbing more carbon per hectare than terrestrial forests.
-  </p>
-</section>
-<Parallax blur={0} bgImage={bgImage} bgImageAlt="Features" strength={300}>
-<section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto " >
-  <h3 className="text-xl md:text-3xl font-bold text-center text-white mb-4 md:mb-8">
-    How We Involve the Community
-  </h3>
-  <p className="text-sm md:text-lg leading-relaxed text-center text-white">
-    Our platform encourages communities to get involved in protecting mangroves by reporting
-    incidents, participating in conservation efforts, and getting rewarded for their actions.
-    This participatory approach ensures that local people have a voice in the management
-    and preservation of these critical ecosystems.
-  </p>
-</section>
-</Parallax>
+      {/* Additional Content */}
+      <section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto" data-aos="fade-up">
+        <h3 className="text-xl md:text-3xl font-bold text-center text-[#2F855A] mb-4 md:mb-8">
+          Why Mangroves Matter
+        </h3>
+        <p className="text-sm md:text-lg leading-relaxed text-center">
+          Mangrove forests act as critical buffers between land and sea, protecting coastal areas
+          from erosion and storm surges. They also support a wide range of biodiversity and act as
+          vital carbon sinks, absorbing more carbon per hectare than terrestrial forests.
+        </p>
+      </section>
 
-
-
+      {/* How We Involve the Community Section */}
+      <Parallax blur={0} bgImage={bgImage} bgImageAlt="Community" strength={300}>
+        <section className="py-12 md:py-20 px-5 md:px-8 max-w-5xl mx-auto" data-aos="fade-up">
+          <h3 className="text-xl md:text-3xl font-bold text-center text-white mb-4 md:mb-8">
+            How We Involve the Community
+          </h3>
+          <p className="text-sm md:text-lg leading-relaxed text-center text-white">
+            Our platform encourages communities to get involved in protecting mangroves by reporting
+            incidents, participating in conservation efforts, and getting rewarded for their actions.
+            This participatory approach ensures that local people have a voice in the management
+            and preservation of these critical ecosystems.
+          </p>
+        </section>
+      </Parallax>
 
       {/* Footer */}
       <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">
