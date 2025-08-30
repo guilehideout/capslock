@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function ReportForm() {
   const [image, setImage] = useState(null);
@@ -6,6 +6,17 @@ function ReportForm() {
   const [location, setLocation] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [bgImage, setBgImage] = useState("/bg_web.jpg");
+
+  // Update background image based on screen size
+  useEffect(() => {
+    const handleResize = () => {
+      setBgImage(window.innerWidth < 768 ? "/bg_img.jpg" : "/bg_web.jpg");
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,18 +51,18 @@ function ReportForm() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50"
-        style={{ backgroundImage: "url('/bg_web.jpg')" }} 
-    >
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-md border border-green-100">
-        <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-50 via-emerald-100 to-teal-50 object-cover"
+      style={{ backgroundImage: `url('${bgImage}')` }}>
+      
+      <div className="bg-white shadow-xl rounded-2xl p-4 sm:p-6 md:p-8 w-full max-w-sm sm:max-w-md border border-green-100">
+        <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-green-700 text-center mb-4 sm:mb-6">
           🌱 Submit Mangrove Report
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Image */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Image
             </label>
             <input
@@ -65,7 +76,7 @@ function ReportForm() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Description
             </label>
             <textarea
@@ -80,7 +91,7 @@ function ReportForm() {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Location
             </label>
             <input
@@ -94,13 +105,13 @@ function ReportForm() {
           </div>
 
           {/* Error */}
-          {error && <p className="text-red-600 text-sm text-center">{error}</p>}
+          {error && <p className="text-red-600 text-xs sm:text-sm text-center">{error}</p>}
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 rounded-xl shadow hover:opacity-90 transition disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 sm:py-2.5 rounded-xl shadow hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? "Submitting..." : "Submit Report"}
           </button>

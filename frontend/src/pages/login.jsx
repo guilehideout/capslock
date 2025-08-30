@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
@@ -8,6 +8,23 @@ function Login() {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const [bgImage, setBgImage] = useState("/bg_web.jpg");
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Switch background image based on screen width
+      if (window.innerWidth < 768) {
+        setBgImage("/bg_img.jpg"); // Mobile background
+      } else {
+        setBgImage("/bg_web.jpg"); // Desktop background
+      }
+    };
+
+    handleResize(); // Set initial image based on screen size
+    window.addEventListener("resize", handleResize); // Update background image on resize
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,17 +66,17 @@ function Login() {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: "url('/bg_web.jpg')" }} 
+      style={{ backgroundImage: `url(${bgImage})` }} // Dynamically setting background image
     >
-      <div className="bg-white/90 shadow-xl rounded-2xl p-8 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-green-700 text-center mb-6">
+      <div className="bg-white/90 shadow-xl rounded-2xl p-4 sm:p-6 w-full max-w-xs sm:max-w-sm">
+        <h1 className="text-xl sm:text-2xl font-bold text-green-700 text-center mb-4 sm:mb-6">
           🌱 Community Mangrove Watch
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
             <input
@@ -67,14 +84,14 @@ function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="you@example.com"
             />
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
@@ -82,28 +99,27 @@ function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="••••••••"
             />
           </div>
 
           {/* Error */}
           {error && (
-            <p className="text-red-600 text-sm text-center">{error}</p>
+            <p className="text-red-600 text-xs sm:text-sm text-center">{error}</p>
           )}
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 rounded-xl shadow hover:opacity-90 transition disabled:opacity-50"
-
+            className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-2 sm:py-2.5 rounded-lg shadow hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="text-sm text-gray-600 text-center mt-4">
+        <p className="text-xs sm:text-sm text-gray-600 text-center mt-4">
           Don’t have an account?{" "}
           <Link to="/signup" className="text-green-700 font-semibold hover:underline">
             Sign up
