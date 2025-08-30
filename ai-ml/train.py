@@ -96,5 +96,5 @@ history_fine = model.fit(
 
 # Save model
 os.makedirs("models", exist_ok=True)
-model.save("models/mangrove_classifier.h5")
-print("Model saved at models/mangrove_classifier.h5")
+model.save("models/image/mangrove_classifier.h5")
+print("Model saved at models/image/mangrove_classifier.h5")
