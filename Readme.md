@@ -12,21 +12,3 @@ AI-assisted validation of reports to confirm mangrove presence.
 Geospatial checks to verify location accuracy.
 Gamification (points, badges, leaderboards) to encourage participation.
 A dashboard for NGOs and government departments to monitor and act.
-
----
-## Prerequisites
-
-Before running the app, make sure you have the following installed:
-
-- **Python 3.8+** (recommended: 3.9 or 3.10 for compatibility with TensorFlow)
-- **pip** (Python package manager)
-- A working virtual environment (recommended for clean dependencies)
-
----
-
-## Required Python Packages
-
-Install the dependencies with:
-
-```bash
-pip install flask tensorflow pillow numpy
