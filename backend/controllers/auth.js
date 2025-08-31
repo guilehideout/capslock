@@ -25,10 +25,17 @@ const userSignUp = asyncHandler(async (req, res) => {
 
   // const session = await supabase.auth.getSession();
 
-  await supabase.from("profiles").insert({
+  const { error: profileError } = await supabase.from("profiles").insert({
     user_id: data.user.id,
     name: username,
+    role: "citizen",
+    points: 0
   });
+
+  if (profileError) {
+    console.log(profileError)
+    throw new ApiError(400, "Error updating user info");
+  } 
 
   return res
     .status(200)
