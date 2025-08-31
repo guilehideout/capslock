@@ -79,4 +79,18 @@ const getCurrentUser = asyncHandler(async (req, res) => {
   return res.status(200).json(new ApiResponse(200, data, "All good"));
 });
 
-export { userSignUp, userLogin, userLogout, getCurrentUser };
+const getCurrentUserInfo = asyncHandler(async (req, res) => {
+  const { data: profile, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("user_id", req.user.id)
+    .single();
+
+  if (error) {
+    throw new ApiError(400, "Invalid request");
+  }
+
+  res.json(profile);
+});
+
+export { userSignUp, userLogin, userLogout, getCurrentUser, getCurrentUserInfo };

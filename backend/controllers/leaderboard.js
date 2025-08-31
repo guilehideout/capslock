@@ -5,12 +5,12 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getLeaderboard = asyncHandler(async (req, res) => {
   const { data, error } = await supabase
-    .from("users")
+    .from("profiles")
     .select("id, name, points")
     .order("points", { ascending: false })
     .limit(10);
   if (error) throw new ApiError(400, error.message);
-  res.status(200).json(new ApiResponse(200, data, "Leaderboard retriev successfully"));
+  res.status(200).json(new ApiResponse(200, data, "Leaderboard retrieved successfully"));
 });
 
 export {
