@@ -6,6 +6,8 @@ import Report from "./pages/report";
 import UserDash from "./pages/user-dash";
 import Impact from "./pages/impact";
 import About from "./pages/about";
+import Leaderboard from "./pages/leaderboard";
+import Alerts from "./pages/alerts";
 
 
 function App() {
@@ -18,7 +20,9 @@ function App() {
         <Route path="/report" element={<Report />} />
         <Route path="/user-dash" element={<UserDash />} />  {/* User Dashboard page */}
         <Route path="/impact" element={<Impact />} />
-        <Route path="/about" element={<About/>} />
+        <Route path="/about" element={<About />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/alerts" element={<Alerts />} />
       </Routes>
     </Router>
   );

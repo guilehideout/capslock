@@ -29,9 +29,11 @@ export default function LandingPage() {
     <div className="bg-[#FDF6E3] min-h-screen text-[#1A202C]">
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
-        <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+       <a href="/" className="hover:text-[#68D391]"><Link to="/" onClick={() => setMenuOpen(false)}>
+       <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
           🌿 ManGrow
-        </h1>
+        </h1></Link></a>
+        
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">

@@ -50,7 +50,7 @@ function Login() {
         localStorage.setItem("token", data.data.session.access_token);
       }
 
-      navigate("/home");
+      navigate("/user-dash");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -63,7 +63,7 @@ function Login() {
       <Navbar />  {/* Include Navbar here */}
       <div className="flex items-center justify-center min-h-screen ">
         <div className="bg-white/90 shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
-          <h1 className="text-3xl font-bold text-green-700 text-center mb-6">🌱 Community Mangrove Watch</h1>
+          <h1 className="text-3xl font-bold text-green-700 text-center mb-6">Login</h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>

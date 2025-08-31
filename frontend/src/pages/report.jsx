@@ -1,8 +1,19 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function ReportForm() {
+
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     navigate("/login"); // redirect if not logged in
+  //   }
+  // }, [navigate]);
+
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState("");
@@ -57,9 +68,10 @@ function ReportForm() {
     <div className="bg-[#FDF6E3] min-h-screen">
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
-        <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
-          🌿 ManGrow
-        </h1>
+        <a href="/user-dash" className="hover:text-[#68D391]"><Link to="/user-dash" onClick={() => setMenuOpen(false)}>
+               <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+                  🌿 ManGrow
+                </h1></Link></a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">

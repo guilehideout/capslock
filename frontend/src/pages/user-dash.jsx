@@ -3,16 +3,30 @@ import { Link } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css"; 
 import { useSpring, animated } from "@react-spring/web"; // For animated counters
-import { Trophy, Star } from "lucide-react"; // nice icons
+import { Trophy, Star, X } from "lucide-react"; // added X for sidebar
+import { useNavigate } from "react-router-dom";
 
 export default function MainPage() {
+
+  // const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     navigate("/login"); // redirect if not logged in
+  //   }
+  // }, [navigate]);
+
   const [user, setUser] = useState({
     name: "John Doe",
     points: 150,
     rank: 5,
+    role: "Volunteer",
+    email: "john@example.com"
   });
 
   const [bgImage, setBgImage] = useState("/bg_dev.jpg"); // Default for desktop
+  const [profileOpen, setProfileOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -47,9 +61,12 @@ export default function MainPage() {
         {/* Navbar */}
         <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
           
-          <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
-           🌿 ManGrow
-          </h1>
+          <a href="/user-dash" className="hover:text-[#68D391]"><Link to="/user-dash">
+            <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+              🌿 ManGrow
+            </h1>
+          </Link></a>
+
           <nav className="hidden md:flex">
             <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
               <li>
@@ -68,9 +85,12 @@ export default function MainPage() {
                 </Link>
               </li>
               <li>
-                <Link to="/profile" className="hover:text-[#68D391]">
+                <button
+                  onClick={() => setProfileOpen(true)}
+                  className="hover:text-[#68D391]"
+                >
                   Profile
-                </Link>
+                </button>
               </li>
             </ul>
           </nav>
@@ -196,6 +216,41 @@ export default function MainPage() {
             </div>
           </div>
         </section>
+
+        {/* Profile Sidebar */}
+        {profileOpen && (
+          <div
+            className="fixed inset-0 z-50 flex justify-end bg-black/40"
+            onClick={() => setProfileOpen(false)}
+          >
+            <div
+              className="h-full w-80 bg-white shadow-xl p-6 transform transition-all duration-300 ease-in-out"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center border-b pb-3 mb-4">
+                <h2 className="text-lg font-semibold text-green-700">Profile</h2>
+                <button onClick={() => setProfileOpen(false)}>
+                  <X size={24} className="text-gray-600 hover:text-gray-900" />
+                </button>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <img
+                  src="./image.png"
+                  alt="profile"
+                  className="w-24 h-24 rounded-full object-cover border-2 border-green-500 shadow-md"
+                />
+                <h3 className="mt-3 text-xl font-bold">{user.name}</h3>
+                <p className="text-sm text-gray-500">{user.role}</p>
+
+                <div className="mt-6 space-y-3 text-gray-700 text-sm text-start">
+                  <p>📧 {user.email}</p>
+                  <p>🌍 Mangrove Project Member</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">

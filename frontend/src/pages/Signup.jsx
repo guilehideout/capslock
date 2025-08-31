@@ -42,7 +42,7 @@ function Signup() {
         throw new Error(data.message || "Signup failed");
       }
 
-      navigate("/home");
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -54,14 +54,15 @@ function Signup() {
     <div className="bg-[#FDF6E3] min-h-screen">
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
-        <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+        <a href="/" className="hover:text-[#68D391]"><Link to="/" onClick={() => setMenuOpen(false)}>
+       <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
           🌿 ManGrow
-        </h1>
+        </h1></Link></a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">
           <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
-            <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
+            <li><a href="/about" className="hover:text-[#68D391]">About</a></li>
             {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
             <li><a href="/impact" className="hover:text-[#68D391]">Impact</a></li>
             {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
@@ -80,7 +81,7 @@ function Signup() {
       {menuOpen && (
         <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
           <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end">
-            <li><a href="#about" className="hover:text-[#68D391]">About</a></li>
+            <li><a href="/about" className="hover:text-[#68D391]">About</a></li>
             {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
             <li><a href="/impact" className="hover:text-[#68D391]">Impact</a></li>
             {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
