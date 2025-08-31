@@ -3,6 +3,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { checkEmptyStringAndTrim } from "../utils/validator.js";
+import { superSupabase } from "../config/supabaseClient.js";
+
 
 const userSignUp = asyncHandler(async (req, res) => {
   let { username, email, password } = req.body;
@@ -29,7 +31,8 @@ const userSignUp = asyncHandler(async (req, res) => {
     user_id: data.user.id,
     name: username,
     role: "citizen",
-    points: 0
+    points: 0,
+    email: email
   });
 
   if (profileError) {
@@ -92,5 +95,18 @@ const getCurrentUserInfo = asyncHandler(async (req, res) => {
 
   res.json(profile);
 });
+
+// Create an admin user
+async function createAdminUser(email, password) {
+  const { data, error } = await superSupabase.auth.admin.createUser({
+    email,
+    password,
+    user_metadata: { is_admin: true }
+  });
+
+  if (error) throw error;
+  return data;
+}
+
 
 export { userSignUp, userLogin, userLogout, getCurrentUser, getCurrentUserInfo };

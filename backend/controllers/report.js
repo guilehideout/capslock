@@ -20,9 +20,6 @@ async function validateReportDescription(description) {
       { text: cleaned }
     );
 
-    if (data.validity === "invalid") {
-      throw new ApiError(400, "Invalid report description");
-    }
     return data;
   } catch (err) {
     console.error("Error calling Python Text API:", err.message);
@@ -75,7 +72,8 @@ async function uploadReportImage(file) {
  * Submit a new report
  */
 const submitReport = asyncHandler(async (req, res) => {
-  const { description, location, user_id } = req.body;
+  const { description, location } = req.body;
+  const user_id = req.user.id;
   const imageFile = req.file;
 
   checkRequired(user_id, "User Id");
@@ -83,9 +81,11 @@ const submitReport = asyncHandler(async (req, res) => {
 
   // 1. Validate description
   const textValidation = await validateReportDescription(description);
+  console.log(textValidation);
 
   // 2. Classify image
   const imageValidation = await classifyReportImage(imageFile.path);
+
   console.log(imageValidation);
 
   // 3. Upload image
@@ -108,6 +108,7 @@ const submitReport = asyncHandler(async (req, res) => {
 
   if (updateError) throw new ApiError(400, "Could not update user points");
 
+  let validity = (textValidation.validity === "valid" && imageValidation.prediction === "mangrove");
   // 6. Insert report
   const { error: insertError } = await supabase.from("reports").insert({
     user_id,
@@ -115,7 +116,7 @@ const submitReport = asyncHandler(async (req, res) => {
     description,
     location,
     category: textValidation.category || imageValidation.category || null,
-    validity: (textValidation.validity === "valid" && imageValidation.prediction === "mongroove") 
+    validity: validity
   });
 
   if (insertError) throw new ApiError(400, insertError.message);
@@ -149,4 +150,24 @@ const getUserReports = asyncHandler(async (req, res) => {
   res.status(200).json(new ApiResponse(200, data, "Reports retrieved successfully"));
 });
 
-export { submitReport, getUserReports };
+const getAllReports = asyncHandler(async(req, res) => {
+  try {
+    if (!req.user.user_metadata?.is_admin) {
+      return res.status(403).json({ error: "Forbidden: not an admin" });
+    }
+
+    // Query reports using the user's JWT (enforces RLS policies automatically)
+    const { data, error } = await supabase
+      .from("reports")
+      .select("*");
+
+    if (error) throw error;
+
+    res.status(200).json(new ApiResponse(200, data, error));
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+})
+
+export { submitReport, getUserReports, getAllReports };
