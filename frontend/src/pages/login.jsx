@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import Navbar from "./navbar";  // Assuming Navbar is saved as a separate component
+import Navbar from "./navbar"; // Assuming Navbar is saved as a separate component
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -40,7 +40,12 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Unexpected server response. Please try again.");
+      }
 
       if (!res.ok) {
         throw new Error(data.message || "Login failed");
@@ -59,15 +64,22 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${bgImage})` }}>
-      <Navbar />  {/* Include Navbar here */}
+    <div
+      className="min-h-screen bg-cover bg-center"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <Navbar /> {/* Include Navbar here */}
       <div className="flex items-center justify-center min-h-screen ">
         <div className="bg-white/90 shadow-xl rounded-2xl p-6 sm:p-8 w-full max-w-md">
-          <h1 className="text-3xl font-bold text-green-700 text-center mb-6">Login</h1>
+          <h1 className="text-3xl font-bold text-green-700 text-center mb-6">
+            Login
+          </h1>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
@@ -79,7 +91,9 @@ function Login() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Password</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
@@ -90,7 +104,9 @@ function Login() {
               />
             </div>
 
-            {error && <p className="text-red-600 text-xs text-center">{error}</p>}
+            {error && (
+              <p className="text-red-600 text-xs text-center">{error}</p>
+            )}
 
             <button
               type="submit"
@@ -103,7 +119,10 @@ function Login() {
 
           <p className="text-sm text-gray-600 text-center mt-4">
             Don’t have an account?{" "}
-            <Link to="/signup" className="text-green-700 font-semibold hover:underline">
+            <Link
+              to="/signup"
+              className="text-green-700 font-semibold hover:underline"
+            >
               Sign up
             </Link>
           </p>

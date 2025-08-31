@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function ReportForm() {
+  const navigate = useNavigate();
 
-  // const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     navigate("/login"); // redirect if not logged in
-  //   }
-  // }, [navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login"); // redirect if not logged in
+    }
+  }, [navigate]);
 
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
@@ -36,6 +34,7 @@ function ReportForm() {
     e.preventDefault();
     setError("");
     setLoading(true);
+    const token = localStorage.getItem("token");
 
     try {
       const formData = new FormData();
@@ -45,14 +44,26 @@ function ReportForm() {
 
       const res = await fetch("http://localhost:8000/api/v1/report", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
         credentials: "include",
       });
 
-      const data = await res.json();
-      console.log(data); // { code: 2000, data: publicUrl, message: "Image uploaded successfully" }
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("Unexpected server response. Please try again.");
+      }
+      console.log(data);
 
-      alert("Report submitted successfully!");
+      const isValid = data.data.imageValidation.prediction === "mangrove" && data.data.textValidation.validity === "valid";
+      console.log(isValid);
+
+      
+      alert(`Report submitted successfully and the report is ${isValid}`);
       // Reset form
       setImage(null);
       setDescription("");
@@ -68,10 +79,13 @@ function ReportForm() {
     <div className="bg-[#FDF6E3] min-h-screen">
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
-        <a href="/user-dash" className="hover:text-[#68D391]"><Link to="/user-dash" onClick={() => setMenuOpen(false)}>
-               <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
-                  🌿 ManGrow
-                </h1></Link></a>
+        <a href="/user-dash" className="hover:text-[#68D391]">
+          <Link to="/user-dash" onClick={() => setMenuOpen(false)}>
+            <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+              🌿 ManGrow
+            </h1>
+          </Link>
+        </a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">
@@ -91,22 +105,20 @@ function ReportForm() {
           {menuOpen ? <X size={24} /> : <Menu size={24} />}
         </button> */}
       </header>
-
       {/* Mobile Menu */}
       {/* {menuOpen && ( */}
-        {/* <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl"> */}
-          {/* <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end"> */}
-            {/* <li><a href="/about" className="hover:text-[#68D391]">About</a></li> */}
-            {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
-            {/* <li><a href="/impact" className="hover:text-[#68D391]">Impact</a></li> */}
-            {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
-            {/* <li><a href="/report" className="hover:text-[#68D391]">Report</a></li> */}
-            {/* <li><a href="/login" className="hover:text-[#68D391]">Login</a></li> */}
-            {/* <li><a href="/signup" className="hover:text-[#68D391]">Signup</a></li> */}
-          {/* </ul> */}
-        {/* </div> */}
-    //  
-
+      {/* <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl"> */}
+      {/* <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C] justify-end"> */}
+      {/* <li><a href="/about" className="hover:text-[#68D391]">About</a></li> */}
+      {/* <li><a href="#features" className="hover:text-[#68D391]">Features</a></li> */}
+      {/* <li><a href="/impact" className="hover:text-[#68D391]">Impact</a></li> */}
+      {/* <li><a href="#users" className="hover:text-[#68D391]">Users</a></li> */}
+      {/* <li><a href="/report" className="hover:text-[#68D391]">Report</a></li> */}
+      {/* <li><a href="/login" className="hover:text-[#68D391]">Login</a></li> */}
+      {/* <li><a href="/signup" className="hover:text-[#68D391]">Signup</a></li> */}
+      {/* </ul> */}
+      {/* </div> */}
+      //
       {/* Report Form Section */}
       <div
         className="flex items-center justify-center min-h-screen bg-cover bg-center p-4"
@@ -117,12 +129,18 @@ function ReportForm() {
             🌱 Submit Mangrove Report
           </h1>
 
-          {error && <p className="text-red-600 text-xs sm:text-sm text-center">{error}</p>}
+          {error && (
+            <p className="text-red-600 text-xs sm:text-sm text-center">
+              {error}
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Image */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Image</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                Image
+              </label>
               <input
                 type="file"
                 accept="image/*"
@@ -134,7 +152,9 @@ function ReportForm() {
 
             {/* Description */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Description</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                Description
+              </label>
               <textarea
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
@@ -147,7 +167,9 @@ function ReportForm() {
 
             {/* Location */}
             <div>
-              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Location</label>
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-2">
+                Location
+              </label>
               <input
                 type="text"
                 value={location}
@@ -169,10 +191,12 @@ function ReportForm() {
           </form>
         </div>
       </div>
-
       {/* Footer */}
       <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">
-       <p>© 2025 Community Mangrove Watch | Built with ❤ at HackOut'25 by capslock</p>
+        <p>
+          © 2025 Community Mangrove Watch | Built with ❤ at HackOut'25 by
+          capslock
+        </p>
       </footer>
     </div>
   );

@@ -128,6 +128,7 @@ const submitReport = asyncHandler(async (req, res) => {
         photoUrl,
         textValidation,
         imageValidation,
+        validity
       },
       "Report submitted successfully"
     )
