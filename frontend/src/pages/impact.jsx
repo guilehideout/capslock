@@ -12,19 +12,19 @@ function About() {
         backgroundImage: `url('/bg_web.jpg')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        backgroundAttachment: "fixed",
       }}
     >
       {/* Navbar */}
       <header className="flex justify-between items-center px-4 md:px-6 py-3 shadow-md bg-[#FDF6E3] fixed top-0 w-full z-50">
         <a href="/" className="hover:text-[#68D391]"><Link to="/" onClick={() => setMenuOpen(false)}>
-       <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
-          🌿 ManGrow
-        </h1></Link></a>
+          <h1 className="text-lg md:text-2xl font-bold text-[#2F855A]">
+            🌿 ManGrow
+          </h1></Link></a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex">
           <ul className="flex space-x-6 font-medium text-sm md:text-base text-[#1A202C]">
-            {/* <li><Link to="/" className="hover:text-[#68D391]">Home</Link></li> */}
             <li><Link to="/about" className="hover:text-[#68D391]">About</Link></li>
             <li><Link to="/impact" className="hover:text-[#68D391]">Impact</Link></li>
             <li><Link to="/login" className="hover:text-[#68D391]">Login</Link></li>
@@ -42,7 +42,6 @@ function About() {
       {menuOpen && (
         <div className="md:hidden fixed top-14 right-0 w-1/3 bg-[#d3fcc6] shadow-lg z-40 rounded-3xl">
           <ul className="flex flex-col items-center space-y-4 py-6 font-medium text-sm text-[#1A202C]">
-            {/* <li><Link to="/" className="hover:text-[#68D391]">Home</Link></li> */}
             <li><Link to="/about" className="hover:text-[#68D391]">About</Link></li>
             <li><Link to="/impact" className="hover:text-[#68D391]">Impact</Link></li>
             <li><Link to="/login" className="hover:text-[#68D391]">Login</Link></li>
@@ -76,6 +75,24 @@ function About() {
         <p className="text-sm md:text-lg leading-relaxed mt-6">
           As we continue to grow, our mission remains focused on expanding our reach, improving our technology, and increasing global participation in mangrove conservation efforts.
         </p>
+      </section>
+
+      {/* Additional Sections */}
+      <section className="py-12 md:py-20 px-5 md:px-8 max-w-6xl mx-auto text-center">
+        <h3 className="text-xl md:text-3xl font-bold text-white mb-6">Community Participation 🌱</h3>
+        <p className="text-sm md:text-lg leading-relaxed mb-6">
+          Volunteers, students, and local communities play an active role in monitoring mangrove areas, participating in restoration drives, and reporting illegal activities. Every effort counts in sustaining these ecosystems.
+        </p>
+
+        <h3 className="text-xl md:text-3xl font-bold text-white mb-6">Education & Awareness 📚</h3>
+        <p className="text-sm md:text-lg leading-relaxed mb-6">
+          Our awareness campaigns educate people about the importance of mangroves, biodiversity, and climate protection. Workshops, webinars, and school programs are helping spread knowledge globally.
+        </p>
+
+        <h3 className="text-xl md:text-3xl font-bold text-white mb-6">Future Goals 🚀</h3>
+        <p className="text-sm md:text-lg leading-relaxed mb-6">
+          Expanding our coverage to new regions, integrating advanced monitoring technology, and increasing global volunteer participation are among our key future goals. Together, we aim to make a measurable impact on coastal sustainability.
+        </p>
 
         <div className="mt-8">
           <Link to="https://www.worldwildlife.org/initiatives/mangroves-for-community-and-climate">
@@ -88,7 +105,8 @@ function About() {
 
       {/* Footer */}
       <footer className="bg-[#2F855A] text-white text-center py-5 mt-12 text-xs md:text-sm">
-        <p>© 2025 Community Mangrove Watch | Built with ❤ at HackOut'25 by capslock</p>      </footer>
+        <p>© 2025 Community Mangrove Watch | Built with ❤ at HackOut'25 by capslock</p>
+      </footer>
     </div>
   );
 }

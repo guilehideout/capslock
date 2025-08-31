@@ -95,7 +95,7 @@ function Signup() {
       <div className="flex items-center justify-center min-h-screen bg-cover bg-center" style={{ backgroundImage: "url('/bg_web.jpg')" }}>
         <div className="bg-white/90 shadow-xl rounded-2xl p-6 sm:p-8 md:p-10 w-full max-w-xs sm:max-w-sm md:max-w-md border border-green-100">
           <h1 className="text-xl sm:text-2xl font-semibold text-green-700 text-center mb-6">
-            🌱 Create an Account
+             Create an Account
           </h1>
 
           {error && <p className="text-red-600 text-xs mb-4 text-center">{error}</p>}

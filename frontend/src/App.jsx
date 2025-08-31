@@ -8,6 +8,7 @@ import Impact from "./pages/impact";
 import About from "./pages/about";
 import Leaderboard from "./pages/leaderboard";
 import Alerts from "./pages/alerts";
+import History from "./pages/history"
 
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/alerts" element={<Alerts />} />
+        <Route path="/history" element={<History/>} />
       </Routes>
     </Router>
   );
